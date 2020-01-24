@@ -111,7 +111,7 @@ def calc_pierce_points(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info',
         stlat=float(params[4])
         stlon=float(params[5])
         arc_d=float(params[9])
-        print('Calculating pierce-points for ray: evlat: '+str(evlat)+', evlon: '+str(evlon)+', evdep: '+str(evdep)+', stlat: '+str(stlat)+', stlon: '+str(stlon)+', arc_d: '+str(arc_d)
+        print('Calculating pierce-points for ray: evlat: '+str(evlat)+', evlon: '+str(evlon)+', evdep: '+str(evdep)+', stlat: '+str(stlat)+', stlon: '+str(stlon)+', arc_d: '+str(arc_d))
         # Calculate ray turning point
         test1 = ['taup_pierce -mod ak135 -h '+str(evdep)+' -ph P -nodiscon -deg '+str(arc_d)+' -turn']
         # Run test1 in terminal
