@@ -50,7 +50,7 @@ def calc_mantle_fresnel_zones(dep_ints=np.array([0,50]), P_wave_period=1):
     dep_vel_fzhw=np.zeros((len(dep_ints),3))
     for i in range(len(dep_ints)):
         vpref=float(model.model.s_mod.v_mod.evaluate_below(dep_ints[i],'p'))
-        fzhw=float(np.sqrt(((P_wave_period*vpref)*(1/3)+dep_ints[i])**2.-dep_ints[i]**2.))
+        fzhw=float(np.sqrt(((P_wave_period*vpref)*(1./3.)+dep_ints[i])**2.-dep_ints[i]**2.))
         
         dep_vel_fzhw[i,0]=float(dep_ints[i])
         dep_vel_fzhw[i,1]=vpref
