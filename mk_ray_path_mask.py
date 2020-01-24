@@ -18,7 +18,7 @@ $DMT_EVNRORG $DMT_EV_LAT $DMT_EV_LON $DMT_EV_DEP $stlat_d $stlon_d $sth $stnr $a
 # numpy is a useful toolkit for scientific computations
 import numpy as np
 # matplotlib is a plotting toolkit
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # Obspy is a seismic toolkit
 import obspy
@@ -28,16 +28,16 @@ from obspy.taup import plot_ray_paths
 model = TauPyModel(model='ak135')
 from subprocess import call
 import subprocess
-import matplotlib
+# import matplotlib
 import sys,glob
 import os.path
 import math
-import matplotlib.pylab as pylab
-params = {'legend.fontsize': 'x-large',
-          'figure.figsize': (16, 10),
-         'xtick.labelsize':'16',
-         'ytick.labelsize':'16'}
-pylab.rcParams.update(params)
+# import matplotlib.pylab as pylab
+# params = {'legend.fontsize': 'x-large',
+#           'figure.figsize': (16, 10),
+#          'xtick.labelsize':'16',
+#          'ytick.labelsize':'16'}
+# pylab.rcParams.update(params)
 
 from pathlib import Path
 home = str(Path.home())
@@ -164,17 +164,19 @@ def haversine(lat1, long1, lats2, longs2, depth):
         dLat = math.radians(lat2 - lat1)
         dLong = math.radians(long2 - long1)
 
-        a = (math.sin(dLat / 2) ** 2 +
-             math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLong / 2) ** 2)
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        d.append(radius * c/1000) # div 1000 for kms
+        a = (math.sin(dLat / 2.0) ** 2.0 +
+             math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLong / 2.0) ** 2.0)
+        c = 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0 - a))
+        d.append(radius * c/1000.0) # div 1000 for kms
     return np.array(d)
 
-def create_mask_grids(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info', PP_FZ_file_in='PP_FZ_OUTFILE.txt',mask_grid_file='TEST_MASK',lon_min=0,lon_max=10,lat_min=0,lat_max=10,grid_d_lat_lon=0.25,fzmf=1):
+def create_mask_grids(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info', PP_FZ_file_in='PP_FZ_OUTFILE.txt',mask_grid_file='TEST_MASK',lon_min=0.0,lon_max=10.0,lat_min=0.0,lat_max=10.0,grid_d_lat_lon=0.25,fzmf=1.0,fzgs=40.0):
     '''
     Here we want to calculate the mask grid
     specify file-in_loc, file-in filename, output mask_grid_file, lat/lon bounds and spacial sampling interval
     fzmf = 'Fresnel zone multiplication factor' Used to broaden the footprint of each fresnel zone based mask.
+    fzgs = 'Fresnel zone grid size' A static value added to region "captured" by ray. Tomography is gridded in constant velocity cells of minimum size ~fzgs
+            This could be modified to be depth adaptive based on average tomographic grid cell density in region etc.
     '''
     
     ######## Check input parameters ###############################
@@ -254,8 +256,8 @@ def create_mask_grids(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info', 
                 grid_to_pp_dist=haversine(pp_lat, pp_lon, lat_points, lon_points, dep)
                 # Make a mask grid "on" everywhere - i.e. equal to one
                 mask_grid=np.ones(len(lat_points))
-                # Convert all points in mask grid less than specified fresnel zone buffer to zero - mask off.
-                mask_grid[grid_to_pp_dist<=(fzhw*fzmf)]=0
+                # Convert all points in mask grid less than specified fresnel zone buffer distance to zero - mask off.
+                mask_grid[grid_to_pp_dist<=(fzhw*fzmf+fzgs)]=0
                 # Add these mask grids to the array dep_mask_grid for each pp
                 dep_mask_grids.append(mask_grid)
             # Convert the output into an array with rows: len(lat_points), columns: num_pp
@@ -277,7 +279,7 @@ def create_mask_grids(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info', 
 #                     turn_depth_factor=0.8)
 # create_mask_grids(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_info',
 #                     PP_FZ_file_in='BBAFRP20_phase_SUMMARY_PP_FZ.txt',mask_grid_file='BBAFRP20_MASK',
-#                     lon_min=-24,lon_max=64,lat_min=-44,lat_max=44,grid_d_lat_lon=0.25,fzmf=1)
+#                     lon_min=-24.0,lon_max=64.0,lat_min=-44.0,lat_max=44.0,grid_d_lat_lon=0.25,fzmf=1.0,fzgs=40.0)
 
 # Test implementation
 calc_pierce_points(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_info',
@@ -287,6 +289,6 @@ calc_pierce_points(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_in
                     
 create_mask_grids(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_info',
                     PP_FZ_file_in='ATS_50_RAYS_PIERCE.txt',mask_grid_file='TEST_ATS_50_MASK',
-                    lon_min=-24,lon_max=64,lat_min=-44,lat_max=44,grid_d_lat_lon=0.25,fzmf=10)
+                    lon_min=-24.0,lon_max=64.0,lat_min=-44.0,lat_max=44.0,grid_d_lat_lon=0.25,fzmf=10.0,fzgs=40.0)
 
 
