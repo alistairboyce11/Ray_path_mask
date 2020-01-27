@@ -17,8 +17,6 @@ $DMT_EVNRORG $DMT_EV_LAT $DMT_EV_LON $DMT_EV_DEP $stlat_d $stlon_d $sth $stnr $a
 ### Importing various python libraries
 # numpy is a useful toolkit for scientific computations
 import numpy as np
-# matplotlib is a plotting toolkit
-# import matplotlib.pyplot as plt
 
 # Obspy is a seismic toolkit
 import obspy
@@ -32,15 +30,8 @@ import subprocess
 import sys,glob
 import os.path
 import math
-# import matplotlib.pylab as pylab
-# params = {'legend.fontsize': 'x-large',
-#           'figure.figsize': (16, 10),
-#          'xtick.labelsize':'16',
-#          'ytick.labelsize':'16'}
-# pylab.rcParams.update(params)
 
-from pathlib import Path
-home = str(Path.home())
+home = '/Users/ab4810'
 
 print('Imports complete.....')
 
@@ -286,9 +277,9 @@ calc_pierce_points(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_in
                     filename='ATS_50_RAYS.txt',out_file='ATS_50_RAYS_PIERCE.txt',
                     turn_depth_factor=0.8)
                     
-                    
-create_mask_grids(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_info',
-                    PP_FZ_file_in='ATS_50_RAYS_PIERCE.txt',mask_grid_file='TEST_ATS_50_MASK',
-                    lon_min=-24.0,lon_max=64.0,lat_min=-44.0,lat_max=44.0,grid_d_lat_lon=0.25,fzmf=10.0,fzgs=40.0)
-
+                    #
+# create_mask_grids(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_info',
+#                     PP_FZ_file_in='ATS_50_RAYS_PIERCE.txt',mask_grid_file='TEST_ATS_50_MASK',
+#                     lon_min=-24.0,lon_max=64.0,lat_min=-44.0,lat_max=44.0,grid_d_lat_lon=0.25,fzmf=10.0,fzgs=40.0)
+#
 
