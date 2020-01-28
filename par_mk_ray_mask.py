@@ -55,15 +55,15 @@ import concurrent.futures
 print('Imports complete.....')
 
 cores=4
-home = '/Users/ab4810'
-file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info'
-PP_FZ_file_in='ATS_50_RAYS_PIERCE.txt'
-mask_grid_file='TEST_ATS_50_MASK_0.5'
+home = '/raid1/ab2568'
+file_in_loc=home+'/GITHUB_AB/3D_model_info'
+PP_FZ_file_in='BBAFRP20_phase_SUMMARY_PP_FZ.txt'
+mask_grid_file='BBAFRP20_MASK_1.0'
 lon_min=-24.0
 lon_max=64.0
 lat_min=-44.0
 lat_max=44.0
-grid_d_lat_lon=0.25
+grid_d_lat_lon=1
 fzmf=1.0
 fzgs=40.0
 
@@ -154,7 +154,6 @@ for dep in dep_ints:
     print('Found '+str(num_pp)+' pierce points at '+str(dep)+'km depth..')
     # For each selected row of data_list
     if num_pp>1:
-        dep_mask_grids=[]
         # for ind in dep_index:
         def get_grids(dep_index):
             global data_list, lat_points, lon_points, dep, fzmf, fzgs
@@ -171,19 +170,20 @@ for dep in dep_ints:
             # Add these mask grids to the array dep_mask_grid for each pp
             return mask_grid
 
+        # This method adds as we go along so should run into less memory trouble.
+        dep_mask_grid_out=np.zeros(len(lat_points))
         with concurrent.futures.ProcessPoolExecutor(max_workers=cores) as executor:
-            # Can also use regular loop rather than list comprehension.
             results = executor.map(get_grids, dep_index)
+            # Loop over each result and add to developing depth mask
             for mask_grid in results:
-                dep_mask_grids.append(mask_grid)
-
-        # Convert the output into an array with rows: len(lat_points), columns: num_pp
-        dep_mask_grids=np.transpose(np.array(dep_mask_grids))
-        # Sum over all rows to flatten mask for each depth:
-        dep_mask_grid_out=dep_mask_grids.sum(axis=1)
+                add_grid=np.array(mask_grid)
+                # want to sum each individual mask value along same dimension
+                dep_mask_grid_out=dep_mask_grid_out+add_grid
+        
         dep_mask_grid_out[dep_mask_grid_out<num_pp]=0
         dep_mask_grid_out[dep_mask_grid_out==num_pp]=1
-    
+        
+        
         print('Writing to file: depth: '+str(dep)+'km')
         for i in range(len(lat_points)):
             dep_mask_file.write('{0:2f} {1:3f} {2:4f} {3:5f}\n'.format(dep_points[i], lat_points[i], lon_points[i], dep_mask_grid_out[i]))
@@ -191,7 +191,3 @@ for dep in dep_ints:
 
         print(f'Finished in {round(dep_finish-dep_start, 2)} seconds(s)\n')
 dep_mask_file.close()
-
-
-
-
