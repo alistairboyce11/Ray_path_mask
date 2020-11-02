@@ -49,7 +49,7 @@ def calc_mantle_fresnel_zones(dep_ints=np.array([0,50]), P_wave_period=1):
 
     return dep_vel_fzhw
 
-def calc_pierce_points(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info', filename='BBAFRP20_phase_SUMMARY.txt',out_file='PP_FZ_OUTFILE.txt',turn_depth_factor=0.8):
+def calc_pierce_points(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info', filename='AFRP20_phase_SUMMARY.txt',out_file='PP_FZ_OUTFILE.txt',turn_depth_factor=0.8):
 
     ######## Check input parameters ###############################
     if not isinstance(file_in_loc, str):
@@ -266,10 +266,10 @@ def create_mask_grids(file_in_loc=home+'/Google_Drive/GITHUB_AB/3D_model_info', 
 
 
 # calc_pierce_points(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_info',
-#                     filename='BBAFRP20_phase_SUMMARY.txt',out_file='BBAFRP20_phase_SUMMARY_PP_FZ.txt',
+#                     filename='AFRP20_phase_SUMMARY.txt',out_file='BBAFRP20_phase_SUMMARY_PP_FZ.txt',
 #                     turn_depth_factor=0.8)
 # create_mask_grids(file_in_loc='/Users/ab4810/Google_Drive/GITHUB_AB/3D_model_info',
-#                     PP_FZ_file_in='BBAFRP20_phase_SUMMARY_PP_FZ.txt',mask_grid_file='BBAFRP20_MASK',
+#                     PP_FZ_file_in='AFRP20_phase_SUMMARY_PP_FZ.txt',mask_grid_file='AFRP20_MASK',
 #                     lon_min=-24.0,lon_max=64.0,lat_min=-44.0,lat_max=44.0,grid_d_lat_lon=0.25,fzmf=1.0,fzgs=40.0)
 
 # Test implementation
